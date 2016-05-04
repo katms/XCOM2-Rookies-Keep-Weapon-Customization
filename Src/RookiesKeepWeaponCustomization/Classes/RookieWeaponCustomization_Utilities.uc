@@ -36,7 +36,13 @@ static function AttachToUnit(XComGameState_Unit Unit, XComGameState NewGameState
 	local XComGameState_Unit UpdatedUnit;
 
 	PrimaryWeapon = Unit.GetItemInSlot(eInvSlot_PrimaryWeapon);
-			
+
+	// if for whatever reason the rookie doesn't have a weapon don't try to read it
+	if(none == PrimaryWeapon)
+	{
+		return;
+	}
+
 	TWC = XComGameState_Unit_TrackWeaponCustomization(Unit.FindComponentObject(class'XComGameState_Unit_TrackWeaponCustomization'));
 	
 	// we are only interested in soldiers that don't already have this
