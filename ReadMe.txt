@@ -1,0 +1,1 @@
+﻿Copies weapon customization to a rookie's new weapon when they gain a class.
