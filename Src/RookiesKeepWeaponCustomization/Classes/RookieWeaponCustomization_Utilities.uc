@@ -61,6 +61,45 @@ static function AttachToUnit(XComGameState_Unit Unit, XComGameState NewGameState
 
 }
 
+// update saved customization when a weapon is recolored since the component was created
+static function UpdateCustomization(XComGameState_Unit Unit)
+{
+	local XComGameState NewGameState;
+	local XComGameState_Unit_TrackWeaponCustomization ComponentState, UpdatedComponent;
+	local XComGameState_Item Weapon; // does not need to be submitted
+
+	// not creating a copy of Unit since no changes will be made to it
+
+	if(Unit == none)
+	{
+		return;
+	}
+
+	Weapon = Unit.GetItemInSlot(eInvSlot_PrimaryWeapon);
+
+	if(none == Weapon)
+	{
+		return;
+	}
+
+	ComponentState = XComGameState_Unit_TrackWeaponCustomization(Unit.FindComponentObject(class'XComGameState_Unit_TrackWeaponCustomization'));
+	
+	if(none == ComponentState)
+	{
+		return;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Updating weapon customization");
+
+	
+	UpdatedComponent = XComGameState_Unit_TrackWeaponCustomization(NewGameState.CreateStateObject(
+						class'XComGameState_Unit_TrackWeaponCustomization', ComponentState.ObjectID));
+
+	UpdatedComponent.SetAppearance(Weapon);
+
+	NewGameState.AddStateObject(UpdatedComponent);
+	`XCOMHISTORY.AddGameStateToHistory(NewGameState);
+}
 
 static function RestoreCustomization(XComGameState_Unit Unit)
 {
