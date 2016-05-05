@@ -10,6 +10,15 @@ event OnInit(UIScreen Screen)
 	local UIArmory_Promotion AP;
 	local XComGameState_Unit Unit;
 
+	if(none == ScreenClass)
+	{
+		ScreenClass = class'X2DownloadableContentInfo_RookiesKeepWeaponCustomization'.static.DetermineUI(class'UIArmory_Promotion');
+		if(Screen.class != ScreenClass)
+		{
+			return;
+		}
+	}
+
 	AP = UIArmory_Promotion(Screen);
 
 	if(none == AP)
@@ -31,5 +40,5 @@ event OnInit(UIScreen Screen)
 
 defaultProperties
 {
-	ScreenClass = UIArmory_Promotion;
+	ScreenClass = none; // UIArmory_Promotion;
 }

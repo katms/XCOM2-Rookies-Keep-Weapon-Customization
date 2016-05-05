@@ -12,6 +12,15 @@ event OnRemoved(UIScreen Screen)
 	local XComGameState_Item Weapon;
 	local XComGameState_Unit WeaponOwner;
 
+	if(none == ScreenClass)
+	{
+		ScreenClass = class'X2DownloadableContentInfo_RookiesKeepWeaponCustomization'.static.DetermineUI(class'UIArmory_WeaponUpgrade');
+		if(Screen.class != ScreenClass)
+		{
+			return;
+		}
+	}
+
 	UpgradeScreen = UIArmory_WeaponUpgrade(Screen);
 
 	if(none == UpgradeScreen)
@@ -32,5 +41,5 @@ event OnRemoved(UIScreen Screen)
 
 defaultproperties
 {
-	ScreenClass = UIArmory_WeaponUpgrade;
+	ScreenClass = none; // UIArmory_WeaponUpgrade;
 }
