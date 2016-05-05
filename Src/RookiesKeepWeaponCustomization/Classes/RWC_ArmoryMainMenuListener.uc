@@ -1,11 +1,14 @@
 // FILE: RWC_ArmoryMainMenuListener.uc
 //
 // Clean up RWC components after the owner is dismissed
+//
+// And so I don't have to come up with a new screen listener for this, doubles as an event listener for new crew
 
 class RWC_ArmoryMainMenuListener extends UIScreenListener;
 
 event OnRemoved(UIScreen Screen)
 {
+	local Object SelfObj;
 	if(none == ScreenClass)
 	{
 		ScreenClass = class'X2DownloadableContentInfo_RookiesKeepWeaponCustomization'.static.DetermineUI(class'UIArmory_MainMenu');
@@ -14,6 +17,10 @@ event OnRemoved(UIScreen Screen)
 			return;
 		}
 	}
+
+	// new crew listener
+	SelfObj = self;
+	`XEVENTMGR.RegisterForEvent(selfObj, 'NewCrewNotification', UpdateCrew, ELD_OnStateSubmitted,,,true);
 
 	Cleanup();
 }
@@ -55,6 +62,13 @@ function Cleanup()
 	}
 
 	History.AddGameStateToHistory(NewGameState);
+}
+
+function EventListenerReturn UpdateCrew(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+{
+	class'RookieWeaponCustomization_Utilities'.static.CheckAllSoldiers();
+	
+	return ELR_NoInterrupt;
 }
 
 defaultproperties
