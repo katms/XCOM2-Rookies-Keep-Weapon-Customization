@@ -23,6 +23,8 @@ event OnInit(UIScreen Screen)
 	if(1 == Unit.GetRank())
 	{
 		class'RookieWeaponCustomization_Utilities'.static.RestoreCustomization(Unit);
+		// refresh weapon pawn so it displays the new customization
+		AP.LoadSoldierEquipment();
 	}
 }
 
