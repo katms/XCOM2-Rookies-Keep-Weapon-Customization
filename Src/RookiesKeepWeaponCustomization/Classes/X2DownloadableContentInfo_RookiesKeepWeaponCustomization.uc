@@ -25,7 +25,7 @@ static event OnLoadedSavedGame()
 /// </summary>
 static event InstallNewCampaign(XComGameState StartState)
 {
-	class'RookieWeaponCustomization_Utilities'.static.CheckAllSoldiers();
+	class'RookieWeaponCustomization_Utilities'.static.CheckAllSoldiers(StartState);
 }
 
 

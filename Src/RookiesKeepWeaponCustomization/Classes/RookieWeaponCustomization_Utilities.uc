@@ -5,17 +5,23 @@
 class RookieWeaponCustomization_Utilities extends Object;
 
 // make sure every rookie has a component
-static function CheckAllSoldiers()
+static function CheckAllSoldiers(optional XComGameState NewGameState)
 {
 	local XComGameState_HeadquartersXCom XHQ;
 	local array<XComGameState_Unit> Soldiers;
 	local XComGameState_Unit Unit;
-	local XComGameState NewGameState;
+	local bool submit;
+
+	// if NewGameState was passed as a parameter, don't submit here
+	submit = (none == NewGameState);
 
 	XHQ = `XCOMHQ;
 	Soldiers = XHQ.GetSoldiers();
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Saving weapon customization");
+	if(submit)
+	{
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Saving weapon customization");
+	}
 
 	foreach Soldiers(Unit)
 	{
@@ -25,7 +31,10 @@ static function CheckAllSoldiers()
 			AttachToUnit(Unit, NewGameState);
 		}
 	}
-	`XCOMHISTORY.AddGameStateToHistory(NewGameState);
+	if(submit)
+	{
+		`XCOMHISTORY.AddGameStateToHistory(NewGameState);
+	}
 }
 
 // initializes the component to store weapon customization
