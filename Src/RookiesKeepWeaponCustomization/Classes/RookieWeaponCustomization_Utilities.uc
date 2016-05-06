@@ -88,7 +88,6 @@ static function UpdateCustomization(XComGameState_Unit Unit)
 	{
 		return;
 	}
-
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Updating weapon customization");
 
 	
@@ -134,9 +133,21 @@ static function RestoreCustomization(XComGameState_Unit Unit)
 	UpdatedComponent = XComGameState_Unit_TrackWeaponCustomization(NewGameState.CreateStateObject(
 						class'XComGameState_Unit_TrackWeaponCustomization', TWCComponent.ObjectID));
 
-	UpdatedWeapon.WeaponAppearance.iWeaponTint = TWCComponent.WeaponAppearance.iWeaponTint;
-	UpdatedWeapon.WeaponAppearance.iWeaponDeco = TWCComponent.WeaponAppearance.iWeaponDeco;
-	UpdatedWeapon.WeaponAppearance.nmWeaponPattern = TWCComponent.WeaponAppearance.nmWeaponPattern;
+	//only overwrite if the saved settings aren't blank
+	if(TWCComponent.WeaponAppearance.iWeaponTint != INDEX_NONE)
+	{
+		UpdatedWeapon.WeaponAppearance.iWeaponTint = TWCComponent.WeaponAppearance.iWeaponTint;
+	}
+
+	if(TWCComponent.WeaponAppearance.iWeaponDeco != INDEX_NONE)
+	{
+		UpdatedWeapon.WeaponAppearance.iWeaponDeco = TWCComponent.WeaponAppearance.iWeaponDeco;
+	}
+	
+	if(TWCComponent.WeaponAppearance.nmWeaponPattern != '')
+	{
+		UpdatedWeapon.WeaponAppearance.nmWeaponPattern = TWCComponent.WeaponAppearance.nmWeaponPattern;
+	}
 
 	// get rid of the component, it's not needed anymore
 	UpdatedUnit.RemoveComponentObject(UpdatedComponent);
