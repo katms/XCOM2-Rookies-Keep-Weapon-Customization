@@ -84,8 +84,10 @@ static function UpdateCustomization(XComGameState_Unit Unit)
 
 	ComponentState = XComGameState_Unit_TrackWeaponCustomization(Unit.FindComponentObject(class'XComGameState_Unit_TrackWeaponCustomization'));
 	
+	// this is the shortest way to initialize the component
 	if(none == ComponentState)
 	{
+		CheckAllSoldiers();
 		return;
 	}
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Updating weapon customization");
