@@ -1,24 +1,24 @@
-// FILE: RWC_ArmoryMainMenuListener.uc
+// FILE: RWC_PreTacticalCleanup.uc
 //
 // Clean up RWC components after the owner is dismissed
+// since there are several strategy UIs soldiers can be dismissed from,
+// and cleanup has to be done before the end of the next tactical mission, 
+// call it on the last pre-tactical UI
 //
 // And so I don't have to come up with a new screen listener for this, doubles as an event listener for new crew
 
-class RWC_ArmoryMainMenuListener extends UIScreenListener;
+class RWC_PreTacticalCleanup extends UIScreenListener;
 
-event OnRemoved(UIScreen Screen)
+event OnInit(UIScreen Screen)
 {
-	local Object SelfObj;
 	if(none == ScreenClass)
 	{
-		ScreenClass = class'X2DownloadableContentInfo_RookiesKeepWeaponCustomization'.static.DetermineUI(class'UIArmory_MainMenu');
+		ScreenClass = class'X2DownloadableContentInfo_RookiesKeepWeaponCustomization'.static.DetermineUI(class'UISkyrangerArrives');
 		if(Screen.class != ScreenClass)
 		{
 			return;
 		}
 	}
-
-	// new crew listener
 	SelfObj = self;
 	`XEVENTMGR.RegisterForEvent(selfObj, 'NewCrewNotification', UpdateCrew, ELD_OnStateSubmitted,,,true);
 
@@ -31,7 +31,7 @@ function Cleanup()
 	local XComGameState NewGameState;
 	local XComGameState_Unit UnitState, UpdatedUnit;
 	local XComGameState_Unit_TrackWeaponCustomization Component, UpdatedComponent;
-
+	
 	History = `XCOMHISTORY;
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Cleanup rookie customization");
 	foreach History.IterateByClassType(class'XComGameState_Unit_TrackWeaponCustomization', Component,, true)
@@ -73,5 +73,5 @@ function EventListenerReturn UpdateCrew(Object EventData, Object EventSource, XC
 
 defaultproperties
 {
-	ScreenClass = none; //UIArmory_MainMenu
+	ScreenClass = none; //UISkyrangerArrives, which is unlikely to be overridded but whatever
 }
