@@ -4,8 +4,7 @@
 // since there are several strategy UIs soldiers can be dismissed from,
 // and cleanup has to be done before the end of the next tactical mission, 
 // call it on the last pre-tactical UI
-//
-// And so I don't have to come up with a new screen listener for this, doubles as an event listener for new crew
+
 
 class RWC_PreTacticalCleanup extends UIScreenListener;
 
@@ -19,8 +18,6 @@ event OnInit(UIScreen Screen)
 			return;
 		}
 	}
-	SelfObj = self;
-	`XEVENTMGR.RegisterForEvent(selfObj, 'NewCrewNotification', UpdateCrew, ELD_OnStateSubmitted,,,true);
 
 	Cleanup();
 }
@@ -62,13 +59,6 @@ function Cleanup()
 	}
 
 	History.AddGameStateToHistory(NewGameState);
-}
-
-function EventListenerReturn UpdateCrew(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
-{
-	class'RookieWeaponCustomization_Utilities'.static.CheckAllSoldiers();
-	
-	return ELR_NoInterrupt;
 }
 
 defaultproperties
